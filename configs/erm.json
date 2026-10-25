@@ -1,0 +1,26 @@
+{
+  "experiment_name": "distilbert_erm",
+  "method": "ERM",
+  "model": {
+    "name": "distilbert-base-uncased",
+    "num_labels": 2,
+    "max_length": 128
+  },
+  "training": {
+    "learning_rate": 0.00002,
+    "batch_size": 16,
+    "eval_batch_size": 32,
+    "num_epochs": 3,
+    "weight_decay": 0.01,
+    "warmup_ratio": 0.1,
+    "seed": 42
+  },
+  "data": {
+    "train_path": "data/processed/tokenized_train",
+    "validation_path": "data/processed/tokenized_validation",
+    "test_path": "data/processed/tokenized_test"
+  },
+  "output": {
+    "directory": "results/erm"
+  }
+}

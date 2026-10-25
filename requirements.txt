@@ -1,0 +1,9 @@
+#python 3.11
+
+torch
+wilds
+numpy
+pandas
+matplotlib
+seaborn
+scikit-learn
