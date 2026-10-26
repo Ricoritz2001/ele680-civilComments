@@ -1,6 +1,4 @@
 # ELE680 Final Project 
-# Toxicity Detection and Worst-Group Performance
-
 This repository contains the ongoing work for the ELE680 final project on toxicity classification using the CivilComments-WILDS dataset.
 
 The project investigates whether a toxicity classifier can achieve strong overall performance while performing poorly on particular identity related groups. The final goal is to compare standard Empirical Risk Minimization (ERM) with Group Distributionally Robust Optimization (Group DRO) and analyze the trade-off between average and worst-group performance.
