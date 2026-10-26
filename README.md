@@ -12,81 +12,17 @@ The project investigates whether a toxicity classifier can achieve strong overal
 
 ## Current Progress
 
-### `eda.ipynb`
+The main analysis notebooks are maintained under `notebooks/`, while reusable code for data loading, preprocessing, evaluation, ERM training, and Group DRO training is organized under `src/`. Experiment configurations are stored in `configs/`, and generated metrics, predictions, figures, and comparison outputs are kept separately under `results/` and `figures/`.
 
-Initial exploratory data analysis.
+Previous development work has been preserved in `_archive/`. This includes Ricardo's original training-set EDA as well as earlier preprocessing, ERM, and Group DRO notebooks. These files are retained for reference while the final pipeline is consolidated into a cleaner structure.
 
-Current work includes:
+The current EDA builds on Ricardo's original analysis and extends it with validation-set comparisons, data-quality checks, and DistilBERT token-length analysis.
 
-- Exploration of the training set
-- Inspection of dataset structure and features
-- Statistical analysis of the training data
-- Initial analysis of feature and label distributions
+Ricardo's original GDRO implementation is currently retained under `src/` alongside the refactored Group DRO implementation. This allows both implementations to be reviewed and compared before selecting the final version used for submission.
 
-### `01EDR.ipynb`
+The current project workflow is:
 
-Exploratory data and identity-group analysis.
-
-Current work includes:
-
-- Exploration of the training, validation, and test splits
-- Inspection of columns and data types
-- Missing-value and duplicate checks
-- Toxic and non-toxic label distributions
-- Comment-length analysis
-- Identity metadata exploration
-- Identity-group distributions across the three splits
-- Toxicity rates across identity groups
-
-### `02TextPre.ipynb`
-
-Text and model-input preparation.
-
-Current work includes:
-
-- Binary toxicity-label preparation
-- DistilBERT tokenizer setup
-- Token-length analysis
-- Maximum sequence-length configuration
-- Tokenization of training, validation, and test data
-- Preservation of identity metadata for later group-level evaluation
-- Saving the tokenized datasets for model training
-
-### `03ERM.ipynb`
-
-Standard ERM baseline experiment.
-
-Current work includes:
-
-- DistilBERT sequence-classification model
-- Standard Empirical Risk Minimization training
-- Training and validation evaluation
-- Overall classification metrics
-- Generation of test predictions for later group-level analysis
-
-
-## Models and Methods
-
-The current baseline uses:
-
-- Model: `distilbert-base-uncased`
-- Task: Binary toxicity classification
-- Non-toxic label: `0`
-- Toxic label: `1`
-- Baseline training method: ERM
-- Planned robust method: Group DRO
-
-The model architecture will remain the same for ERM and Group DRO so that the effect of the training method can be compared fairly.
-
-## Dataset
-
-The project uses the CivilComments-WILDS dataset. The dataset contains:
-
-- Online comment text
-- Binary toxicity labels
-- Training, validation, and test splits
-- Identity-related metadata used for group-level evaluation
-
+**EDA → Preprocessing → ERM Baseline → Group DRO → Model Comparison → Error Analysis**
 ## Project Status
 
 **In progress**
