@@ -93,11 +93,11 @@ Some trained model checkpoints and full training-result folders are not committe
 
 ### Trained models and results
 
-**Drive link:** `https://drive.google.com/drive/folders/1jAU3P89XZax9BPU409D5FXi59VLXb-9A`
+**Trained models:** [Google Drive](https://drive.google.com/drive/folders/1jAU3P89XZax9BPU409D5FXi59VLXb-9A)
 
 These experiments were trained using the available GPU environment at UiS.
 
-**Drive link:** `https://drive.google.com/drive/folders/1A7tpO_CvgODWQ4y6QIraIYqytEy-CZh2?usp=sharing`
+**Results:** [Google Drive](https://drive.google.com/drive/folders/1A7tpO_CvgODWQ4y6QIraIYqytEy-CZh2?usp=sharing)
 
 These experiments were trained using the available GPU environment in Googel Colab.
 
