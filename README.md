@@ -1,4 +1,4 @@
-# Toxicity Classification: ERM and Group DRO
+# Toxicity Classification
 
 This repository contains the code and analysis for an ELE680 project on toxicity classification and worst-group performance using CivilComments-WILDS. The project compares standard Empirical Risk Minimization (ERM) with Group Distributionally Robust Optimization (Group DRO), and additionally investigates identity-targeted Group DRO models for Christian, Muslim, LGBTQ, and Black identity groups.
 
