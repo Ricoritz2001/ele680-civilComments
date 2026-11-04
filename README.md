@@ -10,9 +10,9 @@ The main experimental pipeline is:
 2. Tokenize comments using `distilbert-base-uncased`.
 3. Train a DistilBERT ERM baseline.
 4. Train a general Group DRO model using `identity_any x toxicity label` training groups.
-5. Train separate identity-targeted Group DRO models for Christian, Muslim, LGBTQ, and Black groups.
-6. Compare average and worst-group performance.
-7. Analyze toxic vs. non-toxic identity-subset performance and model errors.
+5. Train separate identity targeted Group DRO models for Christian, Muslim, LGBTQ, and Black groups.
+6. Compare average and worst group performance.
+7. Analyze toxic vs non-toxic identity subset performance and model errors.
 
 
 ## Source Code
@@ -101,5 +101,4 @@ These experiments were trained using the available GPU environment at UiS.
 
 These experiments were trained using the available GPU environment in Googel Colab.
 
-After downloading either Drive folder, place the relevant model/result folders under the corresponding `results/` location expected by the notebooks or update the notebook path variables to the downloaded location.
-
+After downloading either Drive folder, place the relevant model/result folders under the corresponding `results/` location.
