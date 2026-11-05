@@ -66,10 +66,10 @@ Saved `test_predictions.csv` files can be used for later group and error analyse
 
 ## Reproducing General Group DRO
 
-Run the refactored general Group DRO implementation with:
+Run the refactored general Group DRO implementation with our config (e.g, group_dro_black.json, group_dro.json):
 
 ```bash
-python -m src.train_group_dro
+python -m src.train_group_dro --config (config_file)
 ```
 Saved `test_predictions.csv` files can be used for later group and error analyses without retraining the model.
 
