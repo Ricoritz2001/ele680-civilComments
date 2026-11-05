@@ -1,13 +1,15 @@
 """
-Train DistilBERT by using Group DRO.
+Train DistilBERT using Group DRO.
 
-The training groups are defined by identity_any x toxicity label,
-creating four mutually exclusive groups.
+The training groups cross a configurable identity flag with the toxicity
+label, creating four mutually exclusive groups.
 """
 
+import argparse
 import json
 import random
 from pathlib import Path
+import os
 
 import numpy as np
 import pandas as pd
@@ -24,20 +26,24 @@ from transformers import (
     get_linear_schedule_with_warmup,
 )
 
-from src.groups import (
+from groups import (
     GROUP_NAMES,
     IDENTITY_COLUMNS,
+    add_group_id,
     calculate_identity_group_metrics,
-    training_group_id,
+    resolve_training_group_definition,
 )
-from src.metrics import classification_metrics
+from metrics import classification_metrics
+
+os.environ["CUDA_VISIBLE_DEVICES"] = '1'
+
 
 
 CONFIG_PATH = Path("configs/group_dro.json")
 
 
-def load_config():
-    with open(CONFIG_PATH, "r", encoding="utf-8") as file:
+def load_config(config_path=CONFIG_PATH):
+    with open(config_path, "r", encoding="utf-8") as file:
         return json.load(file)
 
 
@@ -48,15 +54,6 @@ def set_seed(seed):
 
     if torch.cuda.is_available():
         torch.cuda.manual_seed_all(seed)
-
-
-def add_group_id(example):
-    return {
-        "group_id": training_group_id(
-            example["identity_any"],
-            example["label"],
-        )
-    }
 
 
 def create_collator(tokenizer):
@@ -211,12 +208,23 @@ def train_epoch(
     return total_robust_loss / len(loader) if len(loader) else float("nan")
 
 
-def main():
-    config = load_config()
+def main(argv=None):
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument(
+        "--config", type=Path, default=CONFIG_PATH,
+        help="Experiment JSON configuration (default: configs/group_dro.json).",
+    )
+    args = parser.parse_args(argv)
+    config = load_config(args.config)
     training = config["training"]
     dro_config = config["group_dro"]
     model_config = config["model"]
     paths = config["data"]
+
+    group_definition = dro_config.setdefault("group_definition", "identity_any_x_label")
+    identity_column, group_names = resolve_training_group_definition(group_definition)
+    if dro_config.get("num_training_groups", 4) != len(group_names):
+        raise ValueError("Identity-by-label training requires num_training_groups=4.")
 
     output_dir = Path(config["output"]["directory"])
     best_model_dir = output_dir / "best_model"
@@ -227,9 +235,17 @@ def main():
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     print("Device:", device)
 
-    train_dataset = load_from_disk(paths["train_path"]).map(add_group_id)
-    val_dataset = load_from_disk(paths["validation_path"]).map(add_group_id)
-    test_dataset = load_from_disk(paths["test_path"]).map(add_group_id)
+    print("Training group definition:", group_definition)
+    group_kwargs = {"identity_column": identity_column}
+    train_dataset = load_from_disk(paths["train_path"]).map(
+        add_group_id, fn_kwargs=group_kwargs
+    )
+    val_dataset = load_from_disk(paths["validation_path"]).map(
+        add_group_id, fn_kwargs=group_kwargs
+    )
+    test_dataset = load_from_disk(paths["test_path"]).map(
+        add_group_id, fn_kwargs=group_kwargs
+    )
 
     tokenizer = AutoTokenizer.from_pretrained(model_config["name"])
     collator = create_collator(tokenizer)
@@ -242,6 +258,12 @@ def main():
         raise ValueError(
             f"At least one training group is empty. Group counts: {group_counts.tolist()}"
         )
+
+    print("Training group counts:", {
+        name: int(group_counts[group_id]) for group_id, name in group_names.items()
+    })
+    with open(output_dir / "run_config.json", "w", encoding="utf-8") as file:
+        json.dump(config, file, indent=4)
 
     sample_weights = np.asarray(
         [1.0 / group_counts[group] for group in train_groups],
