@@ -25,8 +25,6 @@ The reusable implementation is under `src/`:
 - `preprocessing.py` - DistilBERT tokenization and processed dataset generation.
 - `train_erm.py` - ERM training and test evaluation.
 - `train_group_dro.py` - refactored Group DRO training and evaluation.
-- `groupdro/` -  Group DRO implementation and related code retained for comparison/reproducibility.
-
 
 The  `notebooks/` provide the main experimental and analysis workflow:
 
