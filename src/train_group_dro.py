@@ -1,5 +1,5 @@
 """
-Train DistilBERT using Group DRO.
+Train DistilBERT by using Group DRO.
 
 The training groups are defined by identity_any x toxicity label,
 creating four mutually exclusive groups.
